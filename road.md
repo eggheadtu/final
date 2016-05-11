@@ -11,22 +11,35 @@ library(RCurl)
 totalData <- NULL
 roadTotalData <- NULL
 
-for(num in 1:3){
-  road <- fromJSON(getURL("http://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=5aacba65-afda-4ad5-88f5-6026934140e6"))
-  curTime <- Sys.time()
-  roadTempData <- road$result$results
-  roadTempData$curTime <- curTime
-  roadTempData <- subset(roadTempData, select = c(curTime, SectionId,  SectionName, AvgSpd, AvgOcc, TotalVol, MOELevel, StartWgsX, StartWgsY, EndWgsX, EndWgsY))
-  write.table(roadTempData, file = "roadTotalData.txt", sep= ",", append= T, row.names = F,col.name = F)
-  roadTotalData <- rbind(roadTotalData, roadTempData)
 
-  dataCount <- nrow(roadTempData)
-  tempData <- data.frame(curTime, dataCount)
-  write.table(tempData, file = "totalData.txt",sep=",", append=T, row.names = F,col.name = F)
-  totalData <- rbind(totalData, tempData)
+for(num in 1:288){
 
-  Sys.sleep(5)
+    tryCatch({
+        road <- fromJSON(getURL("http://data.taipei/opendata/datalist/apiAccess?scope=resourceAquire&rid=5aacba65-afda-4ad5-88f5-6026934140e6"))
+        curTime <- Sys.time()
+        roadTempData <- road$result$results
+        roadTempData$curTime <- curTime
+        roadTempData <- subset(roadTempData, select = c(curTime, SectionId,  SectionName, AvgSpd, AvgOcc, TotalVol, MOELevel, StartWgsX, StartWgsY, EndWgsX, EndWgsY))
+        write.table(roadTempData, file = "roadTotalData.txt", sep= ",", append= T, row.names = F,col.name = F)
+        roadTotalData <- rbind(roadTotalData, roadTempData)
+        
+        dataCount <- nrow(roadTempData)
+        tempData <- data.frame(curTime, dataCount)
+        write.table(tempData, file = "totalData.txt",sep=",", append=T, row.names = F,col.name = F)
+        totalData <- rbind(totalData, tempData)
+        
+        Sys.sleep(298)
+    }, warning = function(w) {
+        print(w)
+    }, error = function(e) {
+        print(e)
+    }, finally = {
+        
+    })
 }
+----------------------------
+?tryCatch
+
 
 
 
@@ -34,7 +47,7 @@ for(num in 1:3){
 
 ??column.name
 ?write.table
-----------------------------
+
 testit <- function(x)
 {
     p1 <- proc.time()
