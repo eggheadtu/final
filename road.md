@@ -28,7 +28,7 @@ for(num in 1:288){
         write.table(tempData, file = "totalData.txt",sep=",", append=T, row.names = F,col.name = F)
         totalData <- rbind(totalData, tempData)
         
-        Sys.sleep(298)
+        Sys.sleep(299)
     }, warning = function(w) {
         print(w)
     }, error = function(e) {
