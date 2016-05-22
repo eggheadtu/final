@@ -6,7 +6,7 @@ options(digits=16)
 install.packages("ggmap")
 install.packages("RColorBrewer")
 install.packages("ggplot2")
-library(ggmap)
+library("ggmap")
 library("RColorBrewer")
 library("ggplot2")
 
@@ -14,15 +14,12 @@ TaipeiMap = get_map(location = c(121.49,24.86,121.58,25.25), zoom=13, maptype = 
 ggmap(TaipeiMap,extent = 'device')
 
 
-
 for(curtime in unique(roadTotalData$curTime)){
   selectCurTime <- subset(roadTotalData, curTime==curtime)
-
-
-  i=1:10000
-  png(filename="i.png")
-  
-  
+  plotTime <- gsub(":","-",curtime)
+  mypath <- file.path("C:","Users","user","Documents","final",paste("plot_", plotTime, ".png", sep = ""))
+  png(file=mypath)
+   
   TaipeiMapO = ggmap(TaipeiMap, extent = 'device')+
   
                geom_segment(data = subset(selectCurTime, AvgOcc>=0), aes(x = StartWgsX, y = StartWgsY, xend = EndWgsX, yend = EndWgsY, colour = AvgOcc), size=1.1)+ 
@@ -35,9 +32,27 @@ for(curtime in unique(roadTotalData$curTime)){
                scale_alpha(range = c(0, 0.3), guide = FALSE)
 
   TaipeiMapO
+  Sys.sleep(3)
   dev.off()
 }
 -------------------------------
+?ggmap
+names = LETTERS[1:26]
+
+beta1 = rnorm(26, 5, 2) 
+beta0 = 10 
+
+for(i in 1:26){
+ x = rnorm(500, 105, 10)
+ y = beta0 + beta1[i]*x + 15*rnorm(500)
+
+ mypath <- file.path("C:","Users","user","Documents","final",paste("myplot_", names[i], ".jpg", sep = ""))
+
+ png(file=mypath)
+    mytitle = paste("my title is", names[i])
+    plot(x,y, main = mytitle)
+ dev.off()
+}
 ?png
              geom_polygon(data = subset(selectCurTime, AvgOcc>=0), aes(x = (StartWgsX + EndWgsX)*0.5, y = (StartWgsY + EndWgsY)*0.5), color = "grey", size = 0.1, alpha = 0.5)+
              scale_fill_gradientn(colours = brewer.pal(9,"Reds"))
