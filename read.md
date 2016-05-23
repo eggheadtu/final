@@ -6,36 +6,52 @@ options(digits=16)
 install.packages("ggmap")
 install.packages("RColorBrewer")
 install.packages("ggplot2")
-library("ggmap")
-library("RColorBrewer")
-library("ggplot2")
+install.packages("ggsave")
+library(ggmap)
+library(RColorBrewer)
+library(ggplot2)
+library(ggsave)
 
-TaipeiMap = get_map(location = c(121.49,24.86,121.58,25.25), zoom=13, maptype = 'roadmap', color = 'bw')
+TaipeiMap = get_map(location = c(121.49,24.9,121.58,25.2), zoom=13, maptype = 'roadmap', color = 'bw')
 ggmap(TaipeiMap,extent = 'device')
 
+TaipeiMap = get_map(source = c("osm"), location = c(121.49,24.89,121.58,25.22), zoom=13, maptype = 'roadmap', color = 'bw')
+ggmap(TaipeiMap,extent = 'device')
 
 for(curtime in unique(roadTotalData$curTime)){
+
   selectCurTime <- subset(roadTotalData, curTime==curtime)
   plotTime <- gsub(":","-",curtime)
-  mypath <- file.path("C:","Users","user","Documents","final",paste("plot_", plotTime, ".png", sep = ""))
-  png(file=mypath)
+  mypath <- file.path("C:","Users","CGU","Documents",paste("plot_", plotTime, ".png", sep = ""))
+
+  ggsave(filename = mypath)
    
   TaipeiMapO = ggmap(TaipeiMap, extent = 'device')+
   
                geom_segment(data = subset(selectCurTime, AvgOcc>=0), aes(x = StartWgsX, y = StartWgsY, xend = EndWgsX, yend = EndWgsY, colour = AvgOcc), size=1.1)+ 
-               scale_color_continuous(low = "white", high = "red")+
-               guides(size=FALSE)+
-             
+               scale_color_continuous(low = "white", high = "red", limits=c(1, 100))+
+               guides(size=FALSE, colour = FALSE)+
+               
+               
                geom_density2d(data = subset(selectCurTime, TotalVol >= 0), aes(x = (StartWgsX + EndWgsX)*0.5, y = (StartWgsY + EndWgsY)*0.5), size = 0.2) +
                stat_density2d(data = subset(selectCurTime, TotalVol >= 0), aes(x = (StartWgsX + EndWgsX)*0.5, y = (StartWgsY + EndWgsY)*0.5, fill = ..level.., alpha = ..level..), size = 0.01, bins = 16, geom = "polygon") +
                scale_fill_gradient(low = "green", high = "red", guide = FALSE) +
                scale_alpha(range = c(0, 0.3), guide = FALSE)
-
+            
   TaipeiMapO
-  Sys.sleep(3)
-  dev.off()
+  
 }
 -------------------------------
+
+
+
+ 
+ggsave(plot = last_plot(), device = NULL, path = "C:","Users","CGU","Documents", scale = 1, width = NA, height = NA, units = c("mm"), dpi = 300)
+
+  png(file=mypath)
+    dev.off()
+?ggsave
+?get_map
 ?ggmap
 names = LETTERS[1:26]
 
