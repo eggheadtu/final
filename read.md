@@ -29,8 +29,8 @@ for(curtime in unique(roadTotalData$curTime)){
   TaipeiMapO = ggmap(TaipeiMap, extent = 'device')+
   
                geom_segment(data = subset(selectCurTime, AvgOcc>=0), aes(x = StartWgsX, y = StartWgsY, xend = EndWgsX, yend = EndWgsY, colour = AvgOcc), size=1.1)+ 
-               scale_color_continuous(low = "white", high = "red", limits=c(1, 100))+
-               guides(size=FALSE, colour = FALSE)+
+               scale_color_continuous(low = "pink", high = "red", limits=c(1, 100))+
+               guides(size=FALSE, colour = FALSE)
                
                
                geom_density2d(data = subset(selectCurTime, TotalVol >= 0), aes(x = (StartWgsX + EndWgsX)*0.5, y = (StartWgsY + EndWgsY)*0.5), size = 0.2) +
