@@ -6,24 +6,44 @@ options(digits=16)
 install.packages("ggmap")
 install.packages("RColorBrewer")
 install.packages("ggplot2")
+<<<<<<< HEAD
 library(ggmap)
 library(RColorBrewer)
 library(ggplot2)
 library(plotly)
+=======
+install.packages("ggsave")
+library(ggmap)
+library(RColorBrewer)
+library(ggplot2)
+library(ggsave)
+>>>>>>> origin/master
 
 TaipeiMap = get_map(location = c(121.49,24.9,121.58,25.2), zoom=13, maptype = 'roadmap', color = 'bw')
 ggmap(TaipeiMap,extent = 'device')
 
+<<<<<<< HEAD
+=======
+TaipeiMap = get_map(source = c("osm"), location = c(121.49,24.89,121.58,25.22), zoom=13, maptype = 'roadmap', color = 'bw')
+ggmap(TaipeiMap,extent = 'device')
+
+>>>>>>> origin/master
 for(curtime in unique(roadTotalData$curTime)){
 
   selectCurTime <- subset(roadTotalData, curTime==curtime)
   AvgOcc <- selectCurTime$AvgOcc
   plotTime <- gsub(":","-",curtime)
+<<<<<<< HEAD
   mypath <- file.path("C:","Users","user","Documents","final",paste("plot_", plotTime, ".png", sep = ""))
+=======
+  mypath <- file.path("C:","Users","CGU","Documents",paste("plot_", plotTime, ".png", sep = ""))
+
+>>>>>>> origin/master
   ggsave(filename = mypath)
    
   TaipeiMapO = ggmap(TaipeiMap, extent = 'device')+
   
+<<<<<<< HEAD
                geom_segment(data = subset(selectCurTime, AvgOcc >= 0), aes(x = StartWgsX, y = StartWgsY, xend = EndWgsX, yend = EndWgsY, colour = AvgOcc), size=1.1)+ 
                scale_color_continuous(low = "#F5FCF6", high = "green", limits=c(0, 100))+
                guides(size=FALSE, colour = FALSE)+
@@ -67,6 +87,23 @@ geom_density2d(data = subset(selectCurTime, TotalVol >= 0), aes(x = (StartWgsX +
                stat_density2d(data = subset(selectCurTime, TotalVol >= 0), aes(x = (StartWgsX + EndWgsX)*0.5, y = (StartWgsY + EndWgsY)*0.5, fill = ..level.., alpha = ..level..), size = 0.01, bins = 16, geom = "polygon") +
                scale_fill_gradient(low = "green", high = "red", guide = FALSE) +
                scale_alpha(range = c(0, 0.3), guide = FALSE)
+=======
+               geom_segment(data = subset(selectCurTime, AvgOcc>=0), aes(x = StartWgsX, y = StartWgsY, xend = EndWgsX, yend = EndWgsY, colour = AvgOcc), size=1.1)+ 
+               scale_color_continuous(low = "pink", high = "red", limits=c(1, 100))+
+               guides(size=FALSE, colour = FALSE)
+               
+               
+               geom_density2d(data = subset(selectCurTime, TotalVol >= 0), aes(x = (StartWgsX + EndWgsX)*0.5, y = (StartWgsY + EndWgsY)*0.5), size = 0.2) +
+               stat_density2d(data = subset(selectCurTime, TotalVol >= 0), aes(x = (StartWgsX + EndWgsX)*0.5, y = (StartWgsY + EndWgsY)*0.5, fill = ..level.., alpha = ..level..), size = 0.01, bins = 16, geom = "polygon") +
+               scale_fill_gradient(low = "green", high = "red", guide = FALSE) +
+               scale_alpha(range = c(0, 0.3), guide = FALSE)
+            
+  TaipeiMapO
+  
+}
+-------------------------------
+
+>>>>>>> origin/master
 
 
  
